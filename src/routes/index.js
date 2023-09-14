@@ -1,8 +1,8 @@
 import { Switch, Route } from 'react-router-dom'
 
 import { Home } from '../pages/Home'
-import { NewContent } from '../pages/NewContent'
-import { EditContent } from '../pages/EditContent'
+import { NewContact } from '../pages/NewContact'
+import { EditContact } from '../pages/EditContact'
 
 export function Routes() {
 	return (
@@ -14,11 +14,11 @@ export function Routes() {
 			/>
 			<Route
 				path="/new"
-				component={NewContent}
+				component={NewContact}
 			/>
 			<Route
 				path="/edit/:id"
-				component={EditContent}
+				component={EditContact}
 			/>
 		</Switch>
 	)
