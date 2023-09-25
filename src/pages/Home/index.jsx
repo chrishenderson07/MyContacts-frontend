@@ -8,11 +8,16 @@ import {
 import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
-import { Link } from 'react-router-dom'
+
+import { useNavigate } from 'react-router-dom'
+import { Modal } from '../../components/Modal'
 
 export function Home() {
+	const navigate = useNavigate()
+
 	return (
 		<Container>
+			<Modal danger />
 			<InputSearchContainer>
 				<input
 					type="text"
@@ -22,7 +27,7 @@ export function Home() {
 
 			<Header>
 				<strong>3 Contatos</strong>
-				<Link to="/new">Novo Contato</Link>
+				<a onClick={() => navigate('/new')}>Novo Contato</a>
 			</Header>
 			<ListContainer>
 				<header>
@@ -30,10 +35,12 @@ export function Home() {
 						type="button"
 						className="sort-button">
 						<span>Nome</span>
-						<img
-							src={arrow}
-							alt="Arrow"
-						/>
+						<a onClick={() => navigate('/new')}>
+							<img
+								src={arrow}
+								alt="Arrow"
+							/>
+						</a>
 					</button>
 				</header>
 
@@ -48,12 +55,12 @@ export function Home() {
 					</div>
 
 					<div className="actions">
-						<Link to="/edit/123">
+						<a onClick={() => navigate('/edit/123')}>
 							<img
 								src={edit}
 								alt="Edit"
 							/>
-						</Link>
+						</a>
 						<button type="button">
 							<img
 								src={trash}

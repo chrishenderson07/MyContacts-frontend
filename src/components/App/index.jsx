@@ -8,7 +8,7 @@ import { Header } from '../Header'
 
 import { Container } from './styles'
 
-import { Routes } from '../../routes'
+import { Router } from '../../routes'
 
 function App() {
 	return (
@@ -17,7 +17,7 @@ function App() {
 				<GlobalStyles />
 				<Container>
 					<Header />
-					<Routes />
+					<Router />
 				</Container>
 			</ThemeProvider>
 		</BrowserRouter>

@@ -1,25 +1,24 @@
-import { Switch, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import { Home } from '../pages/Home'
 import { NewContact } from '../pages/NewContact'
 import { EditContact } from '../pages/EditContact'
 
-export function Routes() {
+export function Router() {
 	return (
-		<Switch>
+		<Routes>
 			<Route
 				path="/"
-				exact
-				component={Home}
+				element={<Home />}
 			/>
 			<Route
 				path="/new"
-				component={NewContact}
+				element={<NewContact />}
 			/>
 			<Route
 				path="/edit/:id"
-				component={EditContact}
+				element={<EditContact />}
 			/>
-		</Switch>
+		</Routes>
 	)
 }

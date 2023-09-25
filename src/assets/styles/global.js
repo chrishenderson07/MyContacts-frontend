@@ -19,7 +19,7 @@ export default createGlobalStyle`
     font-size: 1.6rem;
   }
 
-  button {
+  button, a {
     cursor: pointer;
   }
 `
