@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+
 import {
 	Container,
 	InputSearchContainer,
@@ -5,19 +7,21 @@ import {
 	ListContainer,
 	Card,
 } from './styles'
+
+// import { Modal } from '../../components/Modal'
+// import { Loader } from '../../components/Loader'
+
 import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
-
-import { useNavigate } from 'react-router-dom'
-import { Modal } from '../../components/Modal'
 
 export function Home() {
 	const navigate = useNavigate()
 
 	return (
 		<Container>
-			<Modal danger />
+			{/* <Loader /> */}
+			{/* <Modal danger /> */}
 			<InputSearchContainer>
 				<input
 					type="text"
