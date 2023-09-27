@@ -22,6 +22,6 @@ export const Input = styled.input`
 		error &&
 		css`
 			color: ${theme.colors.danger.main};
-			border-color: ${theme.colors.danger.main}!important;
+			border-color: ${theme.colors.danger.main} !important;
 		`}
 `
