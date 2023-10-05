@@ -48,23 +48,28 @@ export const Header = styled.header`
 	}
 `
 
-export const ListContainer = styled.div`
+export const ListHeader = styled.header`
 	margin-top: 2.4rem;
 
-	header {
-		margin-bottom: 8px;
-		button {
-			background-color: transparent;
-			border: none;
-			display: flex;
-			align-items: center;
-			gap: 0.8rem;
-			font-size: 1.6rem;
+	margin-bottom: 8px;
 
-			span {
-				font-weight: bold;
-				color: ${({ theme }) => theme.colors.primary.main};
-			}
+	button {
+		background-color: transparent;
+		border: none;
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+		font-size: 1.6rem;
+
+		span {
+			font-weight: bold;
+			color: ${({ theme }) => theme.colors.primary.main};
+		}
+
+		img {
+			transform: ${({ orderBy }) =>
+				orderBy === 'asc' ? 'rotate(-180deg)' : 'rotate(0deg)'};
+			transition: transform 0.2s ease-in;
 		}
 	}
 `

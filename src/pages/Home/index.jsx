@@ -1,65 +1,110 @@
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
 	Container,
 	InputSearchContainer,
 	Header,
-	ListContainer,
+	ListHeader,
 	Card,
 } from './styles'
 
 // import { Modal } from '../../components/Modal'
-// import { Loader } from '../../components/Loader'
+import { Loader } from '../../components/Loader'
 
 import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
+import ContactsService from '../../services/ContactsService'
 
 export function Home() {
+	const [contacts, setContacts] = useState([])
+	const [orderBy, setOrderBy] = useState('asc')
+	const [searchTerm, setSearchTerm] = useState('')
+	const [isLoading, setIsLoading] = useState(true)
+
 	const navigate = useNavigate()
+
+	const filteredContacts = useMemo(() => {
+		return contacts.filter((contact) =>
+			contact.name.toLowerCase().includes(searchTerm.toLowerCase()),
+		)
+	}, [contacts, searchTerm])
+
+	function handleToggleOrderBy() {
+		setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'))
+	}
+
+	function handleChangeSearchTerm(event) {
+		setSearchTerm(event.target.value)
+	}
+
+	useEffect(() => {
+		async function loadContacts() {
+			try {
+				setIsLoading(true)
+
+				const contactsList = await ContactsService.listContacts(orderBy)
+
+				setContacts(contactsList)
+			} catch (error) {
+				console.log(error)
+			} finally {
+				setIsLoading(false)
+			}
+		}
+		loadContacts()
+	}, [orderBy])
 
 	return (
 		<Container>
-			{/* <Loader /> */}
+			<Loader isLoading={isLoading} />
 			{/* <Modal danger /> */}
 			<InputSearchContainer>
 				<input
 					type="text"
 					placeholder="Pesquisar pelo nome..."
+					value={searchTerm}
+					onChange={handleChangeSearchTerm}
 				/>
 			</InputSearchContainer>
 
 			<Header>
-				<strong>3 Contatos</strong>
+				<strong>
+					{filteredContacts.length}
+					{filteredContacts.length === 1 ? ' contato' : ' contatos'}
+				</strong>
 				<a onClick={() => navigate('/new')}>Novo Contato</a>
 			</Header>
-			<ListContainer>
-				<header>
+
+			{filteredContacts.length > 0 && (
+				<ListHeader orderBy={orderBy}>
 					<button
 						type="button"
-						className="sort-button">
+						className="sort-button"
+						onClick={handleToggleOrderBy}>
 						<span>Nome</span>
-						<a onClick={() => navigate('/new')}>
-							<img
-								src={arrow}
-								alt="Arrow"
-							/>
-						</a>
+						<img
+							src={arrow}
+							alt="Arrow"
+						/>
 					</button>
-				</header>
+				</ListHeader>
+			)}
 
-				<Card>
+			{filteredContacts.map((contact) => (
+				<Card key={contact.id}>
 					<div className="info">
 						<div className="contact-name">
-							<strong>Chris Henderson</strong>
-							<small>Instagram</small>
+							<strong>{contact.name}</strong>
+							{contact.category_name && <small>{contact.category_name}</small>}
 						</div>
-						<span>contato@nerodesign.com</span>
-						<span>(21) 99999-9999</span>
+						<span>{contact.email}</span>
+						<span>{contact.phone}</span>
 					</div>
 
 					<div className="actions">
-						<a onClick={() => navigate('/edit/123')}>
+						<a onClick={() => navigate(`/edit/${contact.id}`)}>
 							<img
 								src={edit}
 								alt="Edit"
@@ -73,7 +118,7 @@ export function Home() {
 						</button>
 					</div>
 				</Card>
-			</ListContainer>
+			))}
 		</Container>
 	)
 }
