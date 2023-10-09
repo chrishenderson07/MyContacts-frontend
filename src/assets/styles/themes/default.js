@@ -11,6 +11,7 @@ export default {
 			900: '#222',
 			200: '#BCBCBC',
 			100: '#CCCCCC',
+			50: '#E5E5E5',
 		},
 		danger: {
 			light: '#F97171',

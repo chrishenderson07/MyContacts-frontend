@@ -24,10 +24,12 @@ export const InputSearchContainer = styled.div`
 
 export const Header = styled.header`
 	display: flex;
-	justify-content: space-between;
+	justify-content: ${({ hasError }) =>
+		hasError ? 'flex-end' : 'space-between'};
 	align-items: center;
 	margin-top: 3.2rem;
-
+	border-bottom: 2px solid ${({ theme }) => theme.colors.gray[50]};
+	padding-bottom: 1.6rem;
 	strong {
 		font-size: 2.4rem;
 	}
@@ -122,6 +124,22 @@ export const Card = styled.div`
 		button {
 			background-color: transparent;
 			border: none;
+		}
+	}
+`
+
+export const ErrorContainer = styled.div`
+	margin-top: 1.6rem;
+	display: flex;
+	align-items: center;
+
+	.details {
+		margin-left: 2.4rem;
+		strong {
+			font-size: 2.2rem;
+			color: ${({ theme }) => theme.colors.danger.main};
+			display: block;
+			margin-bottom: 8px;
 		}
 	}
 `

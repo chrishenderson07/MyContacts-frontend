@@ -1,3 +1,5 @@
+import APIError from '../../error/APIError'
+
 class HttpClient {
 	constructor(baseURL) {
 		this.baseURL = baseURL
@@ -17,7 +19,7 @@ class HttpClient {
 		}
 
 		//Optional Chaining
-		throw new Error(body.error || `${response.status} - ${response.statusText}`)
+		throw new APIError(response,body)
 	}
 }
 
