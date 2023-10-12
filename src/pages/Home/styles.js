@@ -24,8 +24,8 @@ export const InputSearchContainer = styled.div`
 
 export const Header = styled.header`
 	display: flex;
-	justify-content: ${({ hasError }) =>
-		hasError ? 'flex-end' : 'space-between'};
+	justify-content: ${({ justifyContent }) => justifyContent};
+
 	align-items: center;
 	margin-top: 3.2rem;
 	border-bottom: 2px solid ${({ theme }) => theme.colors.gray[50]};
@@ -140,6 +140,24 @@ export const ErrorContainer = styled.div`
 			color: ${({ theme }) => theme.colors.danger.main};
 			display: block;
 			margin-bottom: 8px;
+		}
+	}
+`
+
+export const EmptyListContainer = styled.div`
+	margin-top: 1.6rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	p {
+		margin-top: 0.8rem;
+		text-align: center;
+		color: ${({ theme }) => theme.colors.gray[200]};
+
+		strong {
+			color: ${({ theme }) => theme.colors.primary.main};
 		}
 	}
 `

@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo } from 'react'
+/* eslint-disable react/no-unescaped-entities */
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -8,6 +9,7 @@ import {
 	ListHeader,
 	Card,
 	ErrorContainer,
+	EmptyListContainer,
 } from './styles'
 
 // import { Modal } from '../../components/Modal'
@@ -18,6 +20,7 @@ import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
 import sad from '../../assets/images/icons/sad.svg'
+import emptyBox from '../../assets/images/icons/empty-box.svg'
 
 import ContactsService from '../../services/ContactsService'
 
@@ -48,7 +51,7 @@ export function Home() {
 		loadContacts()
 	}
 
-	async function loadContacts() {
+	const loadContacts = useCallback(async () => {
 		try {
 			setIsLoading(true)
 
@@ -61,27 +64,37 @@ export function Home() {
 		} finally {
 			setIsLoading(false)
 		}
-	}
+	}, [orderBy])
 
 	useEffect(() => {
 		loadContacts()
-	}, [orderBy])
+	}, [loadContacts])
 
 	return (
 		<Container>
 			<Loader isLoading={isLoading} />
 			{/* <Modal danger /> */}
-			<InputSearchContainer>
-				<input
-					type="text"
-					placeholder="Pesquisar pelo nome..."
-					value={searchTerm}
-					onChange={handleChangeSearchTerm}
-				/>
-			</InputSearchContainer>
 
-			<Header hasError={hasError}>
-				{!hasError && (
+			{contacts.length > 0 && (
+				<InputSearchContainer>
+					<input
+						type="text"
+						placeholder="Pesquisar pelo nome..."
+						value={searchTerm}
+						onChange={handleChangeSearchTerm}
+					/>
+				</InputSearchContainer>
+			)}
+
+			<Header
+				justifyContent={
+					hasError
+						? 'flex-end'
+						: contacts.length > 0
+						? 'space-between'
+						: 'center'
+				}>
+				{!hasError && contacts.length > 0 && (
 					<strong>
 						{filteredContacts.length}
 						{filteredContacts.length === 1 ? ' contato' : ' contatos'}
@@ -110,6 +123,20 @@ export function Home() {
 
 			{!hasError && (
 				<>
+					{contacts.length < 1 && !isLoading && (
+						<EmptyListContainer>
+							<img
+								src={emptyBox}
+								alt="Empty Box"
+							/>
+							<p>
+								Você ainda não tem nenhum contato cadastrado! Clique no botão
+								<strong> "Novo Contato" </strong>
+								cima para cadastrar o seu primeiro!
+							</p>
+						</EmptyListContainer>
+					)}
+
 					{filteredContacts.length > 0 && (
 						<ListHeader orderBy={orderBy}>
 							<button
