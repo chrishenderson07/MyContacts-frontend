@@ -10,6 +10,7 @@ import {
 	Card,
 	ErrorContainer,
 	EmptyListContainer,
+	SearchNotFoundContainer,
 } from './styles'
 
 // import { Modal } from '../../components/Modal'
@@ -21,6 +22,7 @@ import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
 import sad from '../../assets/images/icons/sad.svg'
 import emptyBox from '../../assets/images/icons/empty-box.svg'
+import magnifierQuestion from '../../assets/images/icons/magnifier-question.svg'
 
 import ContactsService from '../../services/ContactsService'
 
@@ -135,6 +137,18 @@ export function Home() {
 								cima para cadastrar o seu primeiro!
 							</p>
 						</EmptyListContainer>
+					)}
+
+					{contacts.length > 0 && filteredContacts.length < 1 && (
+						<SearchNotFoundContainer>
+							<img
+								src={magnifierQuestion}
+								alt="Magnifier Question"
+							/>
+							<span>
+								Nenhum contato encontrado para <strong>{searchTerm}</strong>
+							</span>
+						</SearchNotFoundContainer>
 					)}
 
 					{filteredContacts.length > 0 && (

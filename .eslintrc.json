@@ -17,8 +17,8 @@
 	"plugins": ["react"],
 	"rules": {
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-		"react/react-in-jsx-scope": "off"
-
+		"react/react-in-jsx-scope": "off",
+		"no-empty": ["error", { "allowEmptyCatch": true }]
 		// "no-unused-vars": "off"
 	}
 }
