@@ -9,12 +9,15 @@ import { Header } from '../Header'
 import { Container } from './styles'
 
 import { Router } from '../../routes'
+import { ToastContainer } from '../../components/Toast/ToastContainer'
 
 function App() {
 	return (
 		<BrowserRouter>
 			<ThemeProvider theme={defaultTheme}>
 				<GlobalStyles />
+				<ToastContainer />
+
 				<Container>
 					<Header />
 					<Router />
