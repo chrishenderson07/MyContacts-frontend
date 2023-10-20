@@ -5,10 +5,10 @@ import { Container } from './styles'
 import xCircleIcon from '../../../assets/images/icons/x-circle.svg'
 import checkCircleIcon from '../../../assets/images/icons/check-circle.svg'
 
-export function ToastMessage({ text, type }) {
+export function ToastMessage({ type, text }) {
 	return (
 		<Container type={type}>
-			{type === 'danger' && (
+			{type === 'error' && (
 				<img
 					src={xCircleIcon}
 					alt="X"

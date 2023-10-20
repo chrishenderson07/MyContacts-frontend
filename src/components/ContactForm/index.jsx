@@ -70,7 +70,6 @@ export function ContactForm({ buttonLabel, onSubmit }) {
 
 	useEffect(() => {
 		async function loadCategories() {
-			console.log('entrei')
 			try {
 				const categoriesList = await CategoriesService.listCategories()
 				setCategories(categoriesList)
