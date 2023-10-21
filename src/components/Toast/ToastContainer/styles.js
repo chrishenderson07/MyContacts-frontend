@@ -5,4 +5,6 @@ export const Container = styled.div`
 	bottom: 4.8rem;
 	left: 50%;
 	transform: translateX(-50%);
+
+	cursor: pointer;
 `

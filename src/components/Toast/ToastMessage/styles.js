@@ -4,7 +4,7 @@ const containerVariants = {
 	default: css`
 		background-color: ${({ theme }) => theme.colors.primary.main};
 	`,
-	sucess: css`
+	success: css`
 		background-color: ${({ theme }) => theme.colors.sucess.main};
 	`,
 	error: css`

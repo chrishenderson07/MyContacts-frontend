@@ -3,12 +3,17 @@ import { useState, useEffect } from 'react'
 import { ToastMessage } from '../ToastMessage'
 import { Container } from './styles'
 
+import { toastEventManager } from '../../../utils/toast'
+
 export function ToastContainer() {
 	const [messages, setMessages] = useState([])
 
+	function handleRemoveMessage(id) {
+		setMessages((prevState) => prevState.filter((message) => message.id !== id))
+	}
+
 	useEffect(() => {
-		function handleAddToast(event) {
-			const { type, text } = event.detail
+		function handleAddToast({ type, text }) {
 			setMessages((prevState) => [
 				...prevState,
 				{
@@ -19,10 +24,10 @@ export function ToastContainer() {
 			])
 		}
 
-		document.addEventListener('addtoast', handleAddToast)
+		toastEventManager.on('addtoast', handleAddToast)
 
 		return () => {
-			document.removeEventListener('addtoast', handleAddToast)
+			toastEventManager.removeListener('addtoast', handleAddToast)
 		}
 	}, [])
 
@@ -31,8 +36,8 @@ export function ToastContainer() {
 			{messages.map((message) => (
 				<ToastMessage
 					key={message.id}
-					type={message.type}
-					text={message.text}
+					message={message}
+					onRemoveMessage={handleRemoveMessage}
 				/>
 			))}
 		</Container>
