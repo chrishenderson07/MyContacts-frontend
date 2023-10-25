@@ -25,6 +25,9 @@ export const Container = styled.div`
 	justify-content: center;
 	gap: 0.8rem;
 
+	&:focus {
+	}
+
 	${({ type }) => containerVariants[type] || containerVariants.default}
 
 	& + & {

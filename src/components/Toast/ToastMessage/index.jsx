@@ -4,15 +4,29 @@ import { Container } from './styles'
 
 import xCircleIcon from '../../../assets/images/icons/x-circle.svg'
 import checkCircleIcon from '../../../assets/images/icons/check-circle.svg'
+import { useEffect } from 'react'
 
 export function ToastMessage({ message, onRemoveMessage }) {
 	function handleRemoveToast() {
 		onRemoveMessage(message.id)
 	}
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			onRemoveMessage(message.id)
+		}, message.duration || 7000)
+
+		return () => {
+			clearTimeout(timeoutId)
+		}
+	}, [message, onRemoveMessage])
+
 	return (
 		<Container
 			type={message.type}
-			onClick={handleRemoveToast}>
+			onClick={handleRemoveToast}
+			tabIndex={0}
+			role="button">
 			{message.type === 'error' && (
 				<img
 					src={xCircleIcon}
@@ -35,6 +49,7 @@ ToastMessage.propTypes = {
 		id: PropTypes.number.isRequired,
 		text: PropTypes.string.isRequired,
 		type: PropTypes.oneOf(['default', 'success', 'error']),
+		duration: PropTypes.number,
 	}),
 	onRemoveMessage: PropTypes.func.isRequired,
 }
