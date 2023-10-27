@@ -11,12 +11,33 @@ import { toast } from '../../utils/toast'
 export function EditContact() {
 	const [isLoading, setIsLoading] = useState(true)
 	const contactFormRef = useRef(null)
+	const [contactName, setContactName] = useState('')
 
 	const { id } = useParams()
 	const navigate = useNavigate()
 
-	function handleSubmit() {
-		//
+	async function handleSubmit(formData) {
+		try {
+			const contact = {
+				name: formData.name,
+				email: formData.email,
+				phone: formData.phone,
+				category_id: formData.categoryId,
+			}
+
+			const contactData = await ContactsService.updateContact(id, contact)
+			setContactName(contactData.name)
+
+			toast({
+				type: 'success',
+				text: 'Contato editado com sucesso',
+			})
+		} catch {
+			toast({
+				type: 'error',
+				text: 'Erro ao editar o contato',
+			})
+		}
 	}
 
 	useEffect(() => {
@@ -27,6 +48,7 @@ export function EditContact() {
 					contactFormRef.current.setFieldsValues(contact)
 
 					setIsLoading(false)
+					setContactName(contact.name)
 				} catch (error) {
 					navigate('/')
 					toast({
@@ -42,7 +64,9 @@ export function EditContact() {
 	return (
 		<>
 			<Loader isLoading={isLoading} />
-			<PageHeader title="Editar contato X" />
+			<PageHeader
+				title={isLoading ? 'Carregando...' : `Editar ${contactName}`}
+			/>
 			<ContactForm
 				ref={contactFormRef}
 				buttonLabel="Salvar Alterações"
