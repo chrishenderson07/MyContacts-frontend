@@ -14,6 +14,7 @@ import { FormGroup } from '../FormGroup'
 import { Input } from '../Input'
 import { Select } from '../Select'
 import { Button } from '../Button'
+import { useSafeAsyncState } from '../../hooks/useSafeAsyncState'
 
 // eslint-disable-next-line react/display-name, react/prop-types
 const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
@@ -21,8 +22,8 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
 	const [email, setEmail] = useState('')
 	const [phone, setPhone] = useState('')
 	const [categoryId, setCategoryId] = useState('')
-	const [categories, setCategories] = useState([])
-	const [isLoadingCategories, setIsLoadingCategories] = useState(true)
+	const [categories, setCategories] = useSafeAsyncState([])
+	const [isLoadingCategories, setIsLoadingCategories] = useSafeAsyncState(true)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 
 	const { errors, setError, removeError, getErrorMessageByFieldName } =
@@ -100,7 +101,7 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
 		}
 
 		loadCategories()
-	}, [])
+	}, [setCategories, setIsLoadingCategories])
 
 	return (
 		<Form
@@ -165,9 +166,6 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
 		</Form>
 	)
 })
-// export function ContactForm() {
-
-// }
 
 ContactForm.propTypes = {
 	buttonLabel: PropTypes.string.isRequired,

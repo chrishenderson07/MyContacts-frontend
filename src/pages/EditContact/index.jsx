@@ -45,11 +45,11 @@ export function EditContact() {
 			async function loadContact() {
 				try {
 					const contact = await ContactsService.getContactsById(id)
-					contactFormRef.current.setFieldsValues(contact)
+					contactFormRef.current?.setFieldsValues(contact)
 
 					setIsLoading(false)
 					setContactName(contact.name)
-				} catch (error) {
+				} catch {
 					navigate('/')
 					toast({
 						type: 'error',
