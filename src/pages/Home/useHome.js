@@ -41,7 +41,6 @@ export function useHome() {
 
 	function handleCloseDeleteModal() {
 		setisDeleteModalVisible(false)
-		setcontactBeingDeleted(null)
 	}
 
 	async function handleConfirmDeleteContact() {
@@ -78,6 +77,7 @@ export function useHome() {
 			setContacts(contactsList)
 		} catch {
 			setHasError(true)
+			setContacts([])
 		} finally {
 			setIsLoading(false)
 		}
