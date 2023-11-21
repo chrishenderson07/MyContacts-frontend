@@ -39,27 +39,37 @@ export function useEditContact() {
 	}
 
 	useEffect(() => {
-		return () => {
-			async function loadContact() {
-				try {
-					const contact = await ContactsService.getContactsById(id)
+		const controller = new AbortController()
+		async function loadContact() {
+			try {
+				const contact = await ContactsService.getContactsById(
+					id,
+					controller.signal,
+				)
 
-					safeAsyncAction(() => {
-						contactFormRef.current.setFieldsValues(contact)
-						setIsLoading(false)
-						setContactName(contact.name)
-					})
-				} catch {
-					safeAsyncAction(() => {
-						navigate('/')
-						toast({
-							type: 'error',
-							text: 'Contato não encontrado',
-						})
-					})
+				safeAsyncAction(() => {
+					contactFormRef.current.setFieldsValues(contact)
+					setIsLoading(false)
+					setContactName(contact.name)
+				})
+			} catch (error) {
+				if (error instanceof DOMException && error.name === 'AbortError') {
+					return
 				}
+				safeAsyncAction(() => {
+					navigate('/')
+					toast({
+						type: 'error',
+						text: 'Contato não encontrado',
+					})
+				})
 			}
-			loadContact()
+		}
+
+		loadContact()
+
+		return () => {
+			controller.abort()
 		}
 	}, [id, navigate, safeAsyncAction])
 

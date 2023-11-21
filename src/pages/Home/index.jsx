@@ -12,10 +12,11 @@ import { Header } from './components/Header'
 import { ErrorStatus } from './components/ErrorStatus'
 import { EmptyList } from './components/EmptyList'
 import { SearchNotFound } from './components/SearchNotFound'
-import { ContactsList } from './components/ContactsList'
+import ContactsList from './components/ContactsList'
 
 export function Home() {
 	const {
+		isPending,
 		isLoading,
 		isDeleteModalVisible,
 		isLoadingDelete,
@@ -59,6 +60,7 @@ export function Home() {
 
 			{isSearchEmpty && <SearchNotFound searchTerm={searchTerm} />}
 
+			{isPending && <h1>Carregando...</h1>}
 			{hasContacts && (
 				<>
 					<ContactsList

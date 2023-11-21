@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useCallback, useTransition } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { toast } from '../../utils/toast'
@@ -13,31 +13,36 @@ export function useHome() {
 	const [isDeleteModalVisible, setisDeleteModalVisible] = useState(false)
 	const [contactBeingDeleted, setcontactBeingDeleted] = useState(null)
 	const [isLoadingDelete, setIsLoadingDelete] = useState(false)
+	const [filteredContacts, setFilteredContacts] = useState([])
+	const [isPending, startTransition] = useTransition()
 
 	const navigate = useNavigate()
 
-	const filteredContacts = useMemo(() => {
-		return contacts.filter((contact) =>
-			contact.name.toLowerCase().includes(searchTerm.toLowerCase()),
-		)
-	}, [contacts, searchTerm])
-
-	function handleToggleOrderBy() {
+	const handleToggleOrderBy = useCallback(() => {
 		setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'))
-	}
+	}, [])
 
 	function handleChangeSearchTerm(event) {
-		setSearchTerm(event.target.value)
+		const { value } = event.target
+		setSearchTerm(value)
+
+		startTransition(() => {
+			setFilteredContacts(
+				contacts.filter((contact) =>
+					contact.name.toLowerCase().includes(value.toLowerCase()),
+				),
+			)
+		})
 	}
 
 	function handleTryAgain() {
 		loadContacts()
 	}
 
-	function handleDeleteContact(contact) {
+	const handleDeleteContact = useCallback((contact) => {
 		setcontactBeingDeleted(contact)
 		setisDeleteModalVisible(true)
-	}
+	}, [])
 
 	function handleCloseDeleteModal() {
 		setisDeleteModalVisible(false)
@@ -67,27 +72,41 @@ export function useHome() {
 		}
 	}
 
-	const loadContacts = useCallback(async () => {
-		try {
-			setIsLoading(true)
+	const loadContacts = useCallback(
+		async (signal) => {
+			try {
+				setIsLoading(true)
 
-			const contactsList = await ContactsService.listContacts(orderBy)
+				const contactsList = await ContactsService.listContacts(orderBy, signal)
 
-			setHasError(false)
-			setContacts(contactsList)
-		} catch {
-			setHasError(true)
-			setContacts([])
-		} finally {
-			setIsLoading(false)
-		}
-	}, [orderBy])
+				setHasError(false)
+				setContacts(contactsList)
+				setFilteredContacts(contactsList)
+			} catch (error) {
+				if (error instanceof DOMException && error.name === 'AbortError') {
+					return
+				}
+				setHasError(true)
+				setContacts([])
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		[orderBy],
+	)
 
 	useEffect(() => {
-		loadContacts()
+		const controller = new AbortController()
+
+		loadContacts(controller.signal)
+
+		return () => {
+			controller.abort()
+		}
 	}, [loadContacts])
 
 	return {
+		isPending,
 		isLoading,
 		isDeleteModalVisible,
 		isLoadingDelete,
